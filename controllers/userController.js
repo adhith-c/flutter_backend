@@ -61,22 +61,28 @@ exports.register = async (req, res) => {
 
 exports.otpVerify = async (req, res) => {
   try {
-    const userId = req.params.id;
-    const { otp } = req.body;
-    const userOtp = await Otp.findOne({ userId });
+    const { otp, email } = req.body;
+    const userOtp = await Otp.findOne({ userEmail: email });
     if (Date.now() < userOtp.expiresAt) {
       const isValidOtp = compareOtp(otp, userOtp.otp);
       if (isValidOtp) {
-        await User.findOneAndUpdate({ _id: userId }, { isVerified: true });
-        await Otp.findOneAndDelete({ userId });
-        res.send("Otp verified successfully");
-      } else {
-        res.send("invalid OTP");
+        await User.findOneAndUpdate({ email }, { isVerified: true });
+        await Otp.findOneAndDelete({ userEmail: email });
+        const userEmail = await User.findOne({ email });
+        const token = jwt.sign(
+          {
+            id: userEmail._id,
+            name: userEmail.firstName + userEmail.lastName,
+            type: "user",
+          },
+          process.env.JWT_SECRET_KEY
+        );
+        res.status(200).json({ token });
       }
     } else {
-      await Otp.findOneAndDelete({ userId });
-      await User.findByIdAndDelete({ _id: userId });
-      res.send("Otp expired .Register again");
+      console.log("otp expired");
+      await Otp.findOneAndDelete({ userEmail: email });
+      await User.findOneAndDelete({ email: email });
     }
   } catch (err) {
     console.log(err);
