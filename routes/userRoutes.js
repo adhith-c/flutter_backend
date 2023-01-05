@@ -15,7 +15,7 @@ const {
 router.get("/", homePage);
 // router.get("/register", register);
 router.post("/register", register);
-router.post("/otpVerify/:id", otpVerify);
+router.post("/otpVerify", otpVerify);
 router.post("/resendOtp/:id", resendOtp);
 router.post("/login", userLogin);
 router.put("/addProfilePhoto", addProfilePic);
