@@ -2,6 +2,11 @@ require("dotenv").config();
 const User = require("../models/user");
 const Otp = require("../models/otp");
 const jwt = require("jsonwebtoken");
+const accountSid = process.env.TWILIO_ACCOUNT_SID;
+const authToken = process.env.TWILIO_AUTH_TOKEN;
+
+const twilio = require("twilio");
+const client = require("twilio")(accountSid, authToken);
 
 const {
   hashPassword,
@@ -61,28 +66,28 @@ exports.register = async (req, res) => {
 
 exports.otpVerify = async (req, res) => {
   try {
-    const { otp, email } = req.body;
-    const userOtp = await Otp.findOne({ userEmail: email });
-    if (Date.now() < userOtp.expiresAt) {
-      const isValidOtp = compareOtp(otp, userOtp.otp);
-      if (isValidOtp) {
-        await User.findOneAndUpdate({ email }, { isVerified: true });
-        await Otp.findOneAndDelete({ userEmail: email });
-        const userEmail = await User.findOne({ email });
-        const token = jwt.sign(
-          {
-            id: userEmail._id,
-            name: userEmail.firstName + userEmail.lastName,
-            type: "user",
-          },
-          process.env.JWT_SECRET_KEY
-        );
-        res.status(200).json({ token });
-      }
+    let mobileNumber = req.body.mobileNumber;
+    mobileNumber = mobileNumber.toString();
+    mobileNumber = mobileNumber.slice(2);
+    mobileNumber = Number(mobileNumber);
+    console.log(req.body.mobileNumber);
+    console.log(req.body.otp);
+    const verification_check = await client.verify.v2
+      .services(process.env.TWILIO_AUTH_SERVICE_SID)
+      .verificationChecks.create({
+        to: `+91${req.body.mobileNumber}`,
+        code: `${req.body.otp}`,
+      });
+    console.log(verification_check.status);
+
+    if (verification_check.status == "approved") {
+      await User.updateOne(
+        { mobileNumber: req.body.mobileNumber },
+        { $set: { isVerified: true } }
+      );
+      res.status(200).json({ msg: "otp verified successfully" });
     } else {
-      console.log("otp expired");
-      await Otp.findOneAndDelete({ userEmail: email });
-      await User.findOneAndDelete({ email: email });
+      return { status: false };
     }
   } catch (err) {
     console.log(err);
