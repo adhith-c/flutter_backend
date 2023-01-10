@@ -11,11 +11,11 @@ const client = require("twilio")(accountSid, authToken);
 const {
   hashPassword,
   comparePassword,
-  hashOtp,
-  compareOtp,
+  
 } = require("../utils/helper");
 
 const { sendOtpVerification } = require("../utils/otpMailer");
+const { response } = require("../routes/userRoutes");
 
 exports.homePage = async (req, res) => {
   try {
@@ -58,6 +58,7 @@ exports.register = async (req, res) => {
       });
     } else {
       res.send("Email already Taken");
+      res.status(401);
     }
   } catch (err) {
     console.log(err);
@@ -67,30 +68,40 @@ exports.register = async (req, res) => {
 exports.otpVerify = async (req, res) => {
   try {
     let mobileNumber = req.body.mobileNumber;
-    mobileNumber = mobileNumber.toString();
-    mobileNumber = mobileNumber.slice(2);
-    mobileNumber = Number(mobileNumber);
-    console.log(req.body.mobileNumber);
-    console.log(req.body.otp);
-    const verification_check = await client.verify.v2
-      .services(process.env.TWILIO_AUTH_SERVICE_SID)
-      .verificationChecks.create({
-        to: `+91${req.body.mobileNumber}`,
-        code: `${req.body.otp}`,
-      });
-    console.log(verification_check.status);
-
-    if (verification_check.status == "approved") {
-      await User.updateOne(
-        { mobileNumber: req.body.mobileNumber },
-        { $set: { isVerified: true } }
-      );
-      res.status(200).json({ msg: "otp verified successfully" });
-    } else {
-      return { status: false };
+    if(!mobileNumber && !req.body.otp){
+      res.status(400).json({meg:"MOBILE_NUMBER IS NOT GIVEN"})
+    }else{
+      console.log("mobile num",mobileNumber);
+      mobileNumber = mobileNumber.toString();
+      mobileNumber = mobileNumber.slice(2);
+      mobileNumber = Number(mobileNumber);
+      console.log(req.body.mobileNumber);
+      console.log(req.body.otp);
+      const verification_check = await client.verify.v2
+        .services(process.env.TWILIO_AUTH_SERVICE_SID)
+        .verificationChecks.create({
+          to: `+91${req.body.mobileNumber}`,
+          code: `${req.body.otp}`,
+        });
+      console.log(verification_check.status);
+  
+      if (verification_check.status == "approved") {
+        console.log("otp is approved");
+        await User.updateOne(
+          { mobileNumber: req.body.mobileNumber },
+          { $set: { isVerified: true } }
+        );
+        res.status(200).json({ msg: "otp verified successfully" });
+      } else {
+        res.status(400).json({ msg: "otp verified failed" });
+        // return { status: false };
+      }
     }
+   
   } catch (err) {
     console.log(err);
+    res.status(406).json({ msg: "twlioo error contact backend dev" });
+
   }
 };
 
@@ -108,26 +119,26 @@ exports.resendOtp = async (req, res) => {
 
 exports.userLogin = async (req, res) => {
   try {
-    const { email, password } = req.body;
-    const userEmail = await User.findOne({ email });
+    const { mobileNumber, password } = req.body;
+    const user = await User.findOne({ mobileNumber });
     // let user;
-    if (userEmail) {
-      const isValidPass = comparePassword(password, userEmail.password);
+    if (user) {
+      const isValidPass = comparePassword(password, user.password);
       if (isValidPass) {
         const token = jwt.sign(
           {
-            id: userEmail._id,
-            name: userEmail.FirstName + userEmail.LastName,
+            id: user._id,
+            name: user.name,
             type: "user",
           },
           process.env.JWT_SECRET_KEY
         );
-        res.send(`successfully logged in ...${token}`);
+        res.status(200).send(`successfully logged in ...${token}`);
       } else {
-        res.send("invalid password");
+        res.status(403).send("invalid password");
       }
     } else {
-      res.send("invalid email");
+      res.status(401).send("invalid Phone Number");
     }
   } catch (err) {
     console.log(err);

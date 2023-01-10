@@ -1,7 +1,7 @@
 require("dotenv").config();
 // const nodemailer = require("nodemailer");
-const Otp = require("../models/otp");
-const { hashOtp, compareOtp } = require("./helper");
+// const Otp = require("../models/otp");
+// const { hashOtp, compareOtp } = require("./helper");
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
 const client = require("twilio")(accountSid, authToken);
@@ -16,16 +16,20 @@ const client = require("twilio")(accountSid, authToken);
 //   },
 // });
 
-const sendOtpVerification = async ({ _id, mobileNumber }, req, res) => {
+const sendOtpVerification = ({ mobileNumber }, req, res) => {
   try {
+
+    console.log("hii otp verification",mobileNumber);
+    console.log(process.env.TWILIO_AUTH_SERVICE_SID);
     //MOBILE NUMBER OTP VALIDATION
-    client.verify
+    client.verify.v2
       .services(process.env.TWILIO_AUTH_SERVICE_SID)
       .verifications.create({
-        to: `+91${mobileNumber}`,
-        channel: "sms",
+        to:`+91${mobileNumber}`,
+        channel:"sms"
       })
       .then((data) => {
+        console.log(data)
         res.status(200).res.send(data);
       });
     const mobile = mobileNumber;
