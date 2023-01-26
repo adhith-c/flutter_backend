@@ -1,0 +1,145 @@
+<header>
+    <!-- TOP HEADER -->
+    <!-- <div id="top-header">
+        <div class="container">
+            <ul class="header-links pull-left">
+                <li><a href="#"><i class="fa fa-phone"></i> +021-95-51-84</a></li>
+                <li><a href="#"><i class="fa fa-envelope-o"></i> email@email.com</a></li>
+                <li><a href="#"><i class="fa fa-map-marker"></i> 1734 Stonecoal Road</a></li>
+            </ul>
+            <ul class="header-links pull-right">
+                <li><a href="#"><i class="fa fa-dollar"></i> USD</a></li>
+                <li><a href="#"><i class="fa fa-user-o"></i> My Account</a></li>
+            </ul>
+        </div>
+    </div> -->
+    <!-- /TOP HEADER -->
+
+    <!-- MAIN HEADER -->
+    <div id="header">
+        <!-- container -->
+        <div class="container">
+            <!-- row -->
+            <div class="row">
+                <!-- LOGO -->
+                <div class="col-md-2 pull-left">
+                    <!-- <div class="header-logo"> -->
+                    <!-- <a href="#" class="logo"> -->
+                    <img class="img-fluid" src="../assets/images/Phonix-1.png" alt="" height="90" width="180"
+                        class="pull">
+                    <!-- </a> -->
+                    <!-- </div> -->
+                </div>
+                <!-- /LOGO -->
+
+                <!-- SEARCH BAR -->
+                <div class="col-md-6">
+                    <div class="header-search">
+                        <form>
+                            <select class="input-select">
+                                <option value="0">All Categories</option>
+                                <% for(let category of categories){ %>
+
+                                <option value="<%= category._id %>"><%= category.categoryName %></option>
+                                <% } %>
+                            </select>
+                            <input class="input" placeholder="Search here">
+                            <button class="search-btn">Search</button>
+                        </form>
+                    </div>
+                </div>
+                <!-- /SEARCH BAR -->
+
+                <!-- ACCOUNT -->
+                <div class="col-md-4 clearfix">
+                    <div class="header-ctn">
+                        <!-- Wishlist -->
+                        <div>
+                            <a href="/wishlist">
+                                <i class="fa fa-heart-o"></i>
+                                <span>Your Wishlist</span>
+
+                                <% let count=0;if(wishlistCount.length>0){ count=wishlistCount[0].count; %>
+
+                                <div class="qty"><%= count %></div>
+                                <%}else{ %>
+                                <div class="qty"><%= count %></div>
+                                <%} %>
+                            </a>
+                        </div>
+                        <!-- /Wishlist -->
+
+
+                        <!-- Cart -->
+                        <div>
+                            <a href="/cart">
+                                <i class="fa fa-shopping-cart"></i>
+                                <span>Your Cart</span>
+                                <% let ccount=0;if(cartCount.length>0){ ccount=cartCount[0].count; %>
+
+                                <div class="qty"><%= ccount %></div>
+                                <%}else{ %>
+                                <div class="qty"><%= ccount %></div>
+                                <%} %>
+                            </a>
+                        </div>
+
+                        <!-- /Cart -->
+                        <!-- Profile -->
+                        <div class="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+                                <i class="fa fa-user"></i>
+                                <span>My Profile</span>
+                            </a>
+                            <div class="cart-dropdown">
+                                <div class="cart-list">
+                                    <% if(login){ %>
+                                    <div class="product-widget">
+                                        <div class="prod">
+                                            <h3 class="product-name"><a href="/profile">My Profile</a></h3>
+                                        </div>
+                                    </div>
+                                    <div class="product-widget">
+                                        <div class="prod">
+                                            <h3 class="product-name"><a href="/logout">logout</a></h3>
+                                        </div>
+                                    </div>
+                                    <% }else{ %>
+                                    <div class="product-widget">
+                                        <div class="prod">
+                                            <h3 class="product-name"><a href="/login">Login</a></h3>
+                                        </div>
+                                    </div>
+                                    <div class="product-widget">
+                                        <div class="prod">
+                                            <h3 class="product-name"><a href="/register">Signup</a></h3>
+                                        </div>
+                                    </div>
+                                    <% } %>
+
+
+                                </div>
+
+                            </div>
+                        </div>
+                        <!-- /profile -->
+
+                        <!-- Menu Toogle -->
+                        <div class="menu-toggle">
+                            <a href="#">
+                                <i class="fa fa-bars"></i>
+                                <span>Menu</span>
+                            </a>
+                        </div>
+                        <!-- /Menu Toogle -->
+                    </div>
+
+                </div>
+                <!-- /ACCOUNT -->
+            </div>
+            <!-- row -->
+        </div>
+        <!-- container -->
+    </div>
+    <!-- /MAIN HEADER -->
+</header>

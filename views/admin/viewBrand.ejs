@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include('../partials/head'); %>
+
+<body>
+    <div class="container-fluid position-relative d-flex p-0">
+        <!-- Spinner Start -->
+        <div id="spinner"
+            class="show bg-dark position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+            <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+        <!-- Spinner End -->
+
+
+        <!-- Sidebar Start -->
+
+        <!-- Sidebar End -->
+        <%- include('../partials/sidebar'); %>
+
+        <!-- Content Start -->
+        <div class="content">
+            <!-- Navbar Start -->
+            <%- include('../partials/adminNavBar'); %>
+            <!-- Navbar End -->
+
+
+            <!-- Table Start -->
+            <div class="container-fluid pt-4 px-4">
+                <div class="row g-4">
+                    <div class="col-md-10">
+                        <div class="bg-secondary rounded h-100 p-4">
+                            <h6 class="mb-4 text-center">Brands</h6>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">No.</th>
+                                        <th scope="col">Logo</th>
+                                        <th scope="col">Brand Name</th>
+                                        <th scope="col">Description</th>
+                                        <th scope="col">Actions</th>
+
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% let number=1; for(let brand of brands){ %>
+                                    <tr>
+                                        <!-- <th scope="row">1</th> -->
+                                        <td><%= number %></td>
+                                        <td>
+                                            <% for(let img of brand.image){ %>
+                                            <img src="<%= img.url %>" alt="brand.jpg" style="width:85px;height:60px;">
+                                            <% } %>
+                                        </td>
+                                        <td><%= brand.brandName %></td>
+                                        <td><%= brand.description %></td>
+                                        <td>
+                                            <div>
+                                                <a href="/admin/editbrand/<%= brand._id %>"><button
+                                                        class="btn btn-success">Edit</button></a>
+                                                <a href="/admin/deletebrand/<%= brand._id %>"><button
+                                                        class="btn btn-danger"
+                                                        onclick="return confirm('Do you want to delete <%= brand.brandname%>?')">Delete</button></a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <% number++;} %>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <!-- Table End -->
+
+
+            <!-- Footer Start -->
+
+            <!-- Footer End -->
+        </div>
+        <!-- Content End -->
+
+
+        <!-- Back to Top -->
+        <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+    </div>
+
+    <!-- JavaScript Libraries -->
+    <%- include('../partials/libraries') %>
+</body>
+
+</html>

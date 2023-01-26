@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- <%- include('../partials/head'); %> -->
+
+<head>
+    <meta charset="utf-8">
+    <title>Phonix Admin</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
+    <!-- Favicon -->
+    <link href="img/favicon.ico" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Roboto:wght@500;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Template Stylesheet -->
+    <link href="css/style.css" rel="stylesheet">
+    <style>
+        /********** Template CSS **********/
+        :root {
+            --primary: #EB1616;
+            --secondary: #191C24;
+            --light: #6C7293;
+            --dark: #000000;
+        }
+
+        .back-to-top {
+            position: fixed;
+            display: none;
+            right: 45px;
+            bottom: 45px;
+            z-index: 99;
+        }
+
+
+        /*** Spinner ***/
+        #spinner {
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity .5s ease-out, visibility 0s linear .5s;
+            z-index: 99999;
+        }
+
+        #spinner.show {
+            transition: opacity .5s ease-out, visibility 0s linear 0s;
+            visibility: visible;
+            opacity: 1;
+        }
+
+
+        /*** Button ***/
+        .btn {
+            transition: .5s;
+        }
+
+        .btn-square {
+            width: 38px;
+            height: 38px;
+        }
+
+        .btn-sm-square {
+            width: 32px;
+            height: 32px;
+        }
+
+        .btn-lg-square {
+            width: 48px;
+            height: 48px;
+        }
+
+        .btn-square,
+        .btn-sm-square,
+        .btn-lg-square {
+            padding: 0;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: normal;
+            border-radius: 50px;
+        }
+
+
+        /*** Layout ***/
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            width: 250px;
+            height: 100vh;
+            overflow-y: auto;
+            background: var(--secondary);
+            transition: 0.5s;
+            z-index: 999;
+        }
+
+        .content {
+            margin-left: 250px;
+            min-height: 100vh;
+            background: var(--dark);
+            transition: 0.5s;
+        }
+
+        @media (min-width: 992px) {
+            .sidebar {
+                margin-left: 0;
+            }
+
+            .sidebar.open {
+                margin-left: -250px;
+            }
+
+            .content {
+                width: calc(100% - 250px);
+            }
+
+            .content.open {
+                width: 100%;
+                margin-left: 0;
+            }
+        }
+
+        @media (max-width: 991.98px) {
+            .sidebar {
+                margin-left: -250px;
+            }
+
+            .sidebar.open {
+                margin-left: 0;
+            }
+
+            .content {
+                width: 100%;
+                margin-left: 0;
+            }
+        }
+
+
+        /*** Navbar ***/
+        .sidebar .navbar .navbar-nav .nav-link {
+            padding: 7px 20px;
+            color: var(--light);
+            font-weight: 500;
+            border-left: 3px solid var(--secondary);
+            border-radius: 0 30px 30px 0;
+            outline: none;
+        }
+
+        .sidebar .navbar .navbar-nav .nav-link:hover,
+        .sidebar .navbar .navbar-nav .nav-link.active {
+            color: var(--primary);
+            background: var(--dark);
+            border-color: var(--primary);
+        }
+
+        .sidebar .navbar .navbar-nav .nav-link i {
+            width: 40px;
+            height: 40px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--dark);
+            border-radius: 40px;
+        }
+
+        .sidebar .navbar .navbar-nav .nav-link:hover i,
+        .sidebar .navbar .navbar-nav .nav-link.active i {
+            background: var(--secondary);
+        }
+
+        .sidebar .navbar .dropdown-toggle::after {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            border: none;
+            content: "\f107";
+            font-family: "Font Awesome 5 Free";
+            font-weight: 900;
+            transition: .5s;
+        }
+
+        .sidebar .navbar .dropdown-toggle[aria-expanded=true]::after {
+            transform: rotate(-180deg);
+        }
+
+        .sidebar .navbar .dropdown-item {
+            padding-left: 25px;
+            border-radius: 0 30px 30px 0;
+            color: var(--light);
+        }
+
+        .sidebar .navbar .dropdown-item:hover,
+        .sidebar .navbar .dropdown-item.active {
+            background: var(--dark);
+        }
+
+        .content .navbar .navbar-nav .nav-link {
+            margin-left: 25px;
+            padding: 12px 0;
+            color: var(--light);
+            outline: none;
+        }
+
+        .content .navbar .navbar-nav .nav-link:hover,
+        .content .navbar .navbar-nav .nav-link.active {
+            color: var(--primary);
+        }
+
+        .content .navbar .sidebar-toggler,
+        .content .navbar .navbar-nav .nav-link i {
+            width: 40px;
+            height: 40px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--dark);
+            border-radius: 40px;
+        }
+
+        .content .navbar .dropdown-item {
+            color: var(--light);
+        }
+
+        .content .navbar .dropdown-item:hover,
+        .content .navbar .dropdown-item.active {
+            background: var(--dark);
+        }
+
+        .content .navbar .dropdown-toggle::after {
+            margin-left: 6px;
+            vertical-align: middle;
+            border: none;
+            content: "\f107";
+            font-family: "Font Awesome 5 Free";
+            font-weight: 900;
+            transition: .5s;
+        }
+
+        .content .navbar .dropdown-toggle[aria-expanded=true]::after {
+            transform: rotate(-180deg);
+        }
+
+        @media (max-width: 575.98px) {
+            .content .navbar .navbar-nav .nav-link {
+                margin-left: 15px;
+            }
+        }
+
+
+        /*** Date Picker ***/
+        .bootstrap-datetimepicker-widget.bottom {
+            top: auto !important;
+        }
+
+        .bootstrap-datetimepicker-widget .table * {
+            border-bottom-width: 0px;
+        }
+
+        .bootstrap-datetimepicker-widget .table th {
+            font-weight: 500;
+        }
+
+        .bootstrap-datetimepicker-widget.dropdown-menu {
+            padding: 10px;
+            border-radius: 2px;
+        }
+
+        .bootstrap-datetimepicker-widget table td.active,
+        .bootstrap-datetimepicker-widget table td.active:hover {
+            background: var(--primary);
+        }
+
+        .bootstrap-datetimepicker-widget table td.today::before {
+            border-bottom-color: var(--primary);
+        }
+
+
+        /*** Testimonial ***/
+        .progress .progress-bar {
+            width: 0px;
+            transition: 2s;
+        }
+
+
+        /*** Testimonial ***/
+        .testimonial-carousel .owl-dots {
+            margin-top: 24px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+        }
+
+        .testimonial-carousel .owl-dot {
+            position: relative;
+            display: inline-block;
+            margin: 0 5px;
+            width: 15px;
+            height: 15px;
+            border: 5px solid var(--primary);
+            border-radius: 15px;
+            transition: .5s;
+        }
+
+        .testimonial-carousel .owl-dot.active {
+            background: var(--dark);
+            border-color: var(--primary);
+        }
+    </style>
+</head>
+
+
+<body>
+    <div class="container-fluid position-relative d-flex p-0">
+        <!-- Spinner Start -->
+        <div id="spinner"
+            class="show bg-dark position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+            <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+        <!-- Spinner End -->
+
+
+        <!-- Sidebar Start -->
+        <%- include('../partials/sidebar'); %>
+        <!-- Sidebar End -->
+
+
+        <!-- Content Start -->
+        <div class="content">
+            <!-- Navbar Start -->
+
+            <!-- Navbar End -->
+
+            <%- include('../partials/adminNavBar'); %>
+            <!-- Form Start -->
+            <div class="container-fluid pt-4 px-4">
+                <div class="row g-4">
+                    <div class="col-sm-12 col-xl-6">
+                        <div class="bg-secondary rounded h-100 p-4">
+                            <h6 class="mb-4 text-center">Add Brand</h6>
+                            <form action="/admin/add-brand" method="post" enctype="multipart/form-data">
+                                <div class="mb-3">
+                                    <label for="brandname" class="form-label">Brand Name</label>
+                                    <input type="text" class="form-control" id="brandname" name="brandName"
+                                        aria-describedby="emailHelp">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="brandimg" class="form-label">Add Logo Image</label>
+                                    <input class="form-control form-control-sm bg-dark" id="brandimg" name="image"
+                                        type="file" multiple>
+                                </div>
+                                <div class="form-floating">
+                                    <textarea class="form-control" placeholder="Leave a comment here" id="description"
+                                        name="description" style="height: 150px;"></textarea>
+                                    <label for="description">Description</label>
+                                </div>
+                                <div class="mt-3 text-center">
+                                    <button type="submit" class="btn btn-primary ">Submit</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <!-- Form End -->
+
+
+            <!-- Footer Start -->
+
+            <!-- Footer End -->
+        </div>
+        <!-- Content End -->
+
+
+        <!-- Back to Top -->
+        <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+    </div>
+
+    <!-- JavaScript Libraries -->
+    <%- include('../partials/libraries') %>
+</body>
+
+</html>

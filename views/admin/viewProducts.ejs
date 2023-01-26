@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include('../partials/head'); %>
+
+<body>
+    <div class="container-fluid position-relative d-flex p-0">
+        <!-- Spinner Start -->
+        <div id="spinner"
+            class="show bg-dark position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+            <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+        <!-- Spinner End -->
+
+
+        <!-- Sidebar Start -->
+        <%- include('../partials/sidebar'); %>
+        <!-- Sidebar End -->
+
+
+        <!-- Content Start -->
+        <div class="content">
+            <!-- Navbar Start -->
+            <%- include('../partials/adminNavBar'); %>
+            <!-- Navbar End -->
+
+
+            <!-- Table Start -->
+            <div class="container-fluid pt-4 px-4">
+                <div class="row g-4">
+                    <div>
+                        <a href="/admin/addproducts"><button class="btn btn-success">Add Products</button></a>
+                    </div>
+                    <div class="col-12">
+                        <div class="bg-secondary rounded h-100 p-4 text-center">
+                            <h6 class="mb-4">Producrs</h6>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <!-- <th scope="col">#</th> -->
+                                            <th scope="col">Image</th>
+                                            <th scope="col">Product Name</th>
+                                            <th scope="col">Price</th>
+                                            <th scope="col">MRP</th>
+                                            <th scope="col">Stock</th>
+                                            <th scope="col">Brand</th>
+                                            <th scope="col">Category</th>
+                                            <!-- <th scope="col">Description</th> -->
+                                            <th scope="col">Actions</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        <% for(let product of products){ %>
+                                        <tr>
+                                            <!-- <th scope="row">1</th>
+                                            <td>John</td> -->
+                                            <td>
+
+                                                <img src="<%= product.image[0].url %>"
+                                                    alt="<%= product.image[0].filename %>"
+                                                    style="width:55px;height:60px;">
+                                            </td>
+                                            <td><%= product.productname %></td>
+                                            <td><%= product.price %></td>
+                                            <td><%= product.mrp %></td>
+                                            <td><%= product.stock %></td>
+                                            <td><%= product.brand %></td>
+                                            <td><%= product.category %></td>
+                                            <!-- <td><%= product.description %></td> -->
+                                            <td>
+                                                <% if(product.isDeleted == false){ %>
+                                                <div>
+                                                    <a href="/admin/editproducts/<%= product._id %>"><button
+                                                            class="btn btn-success btn-sm">Edit</button></a>
+                                                    <!-- <a href="/admin/deleteproducts/<%= product._id %>"><button
+                                                            class="btn btn-danger btn-sm"
+                                                            onclick="return confirm('Do you want to delete <%= product.productname%>?')">Delete</button></a> -->
+                                                    <!-- <a href="/admin/deleteproducts/<%= product._id %>"> -->
+                                                    <button class="btn btn-danger btn-sm"
+                                                        onclick="return confirmDelete('<%= product._id %>')">Delete</button>
+                                                    <!-- </a> -->
+                                                </div>
+                                                <% } else { %>
+                                                <div>Deleted</div>
+                                                <% } %>
+                                            </td>
+                                        </tr>
+                                        <% } %>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Table End -->
+
+
+            <!-- Footer Start -->
+
+            <!-- Footer End -->
+        </div>
+        <!-- Content End -->
+
+
+        <!-- Back to Top -->
+        <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+    </div>
+
+    <!-- JavaScript Libraries -->
+    <%- include('../partials/libraries') %>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script>
+        function confirmDelete(productid) {
+            swal({
+                    title: "Are you sure?",
+                    text: "Once deleted, you will not be able to recover this Product",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true,
+                })
+                .then((willDelete) => {
+                    if (willDelete) {
+                        swal("Poof! Product has been deleted!", {
+                            icon: "success",
+
+                        });
+                        window.location.href = `/admin/deleteproducts/${productid}`
+                    } else {
+                        swal("Your Product is safe!");
+                        return false
+                    }
+                });
+
+        }
+    </script>
+</body>
+
+</html>

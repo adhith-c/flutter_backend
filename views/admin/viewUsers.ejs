@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include('../partials/head'); %>
+
+<body>
+    <div class="container-fluid position-relative d-flex p-0">
+        <!-- Spinner Start -->
+        <div id="spinner"
+            class="show bg-dark position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+            <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+        <!-- Spinner End -->
+
+
+        <!-- Sidebar Start -->
+        <%- include('../partials/sidebar'); %>
+        <!-- Sidebar End -->
+
+
+        <!-- Content Start -->
+        <div class="content">
+            <!-- Navbar Start -->
+            <%- include('../partials/adminNavBar'); %>
+            <%- include('../partials/flash'); %>
+            <!-- Navbar End -->
+
+
+            <!-- Table Start -->
+            <div class="container-fluid pt-4 px-4">
+                <div class="row g-4">
+
+                    <div class="col-12 ">
+                        <div class="bg-secondary rounded h-100 p-4">
+                            <h6 class="mb-4 text-center">Users</h6>
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <!-- <th scope="col">No.</th> -->
+                                        <th scope="col">First Name</th>
+                                        <th scope="col">Last Name</th>
+                                        <th scope="col">Email</th>
+                                        <th scope="col">Status</th>
+                                        <th scope="col">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% for(let user of users){ %>
+                                    <tr>
+                                        <!-- <th scope="row">1</th> -->
+                                        <td><%= user.firstname %></td>
+                                        <td><%= user.lastname %></td>
+                                        <td><%= user.username %></td>
+                                        <td><%= user.status %></td>
+                                        <td>
+                                            <div>
+                                                <a href="/admin/blockunblock/<%= user._id %>"> <button
+                                                        class="btn btn-danger">Block/UnBlock</button></a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <% } %>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Table End -->
+
+
+            <!-- Footer Start -->
+
+            <!-- Footer End -->
+        </div>
+        <!-- Content End -->
+
+
+        <!-- Back to Top -->
+        <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+    </div>
+
+    <!-- JavaScript Libraries -->
+    <%- include('../partials/libraries') %>
+    <!-- <script>
+        
+        function blockUser(userId,status,username) {
+        document.getElementById('userId').value = userId;
+        document.getElementById('userStatus').value = userStatus;
+        let blockStatus;
+        if(status == 'active') {
+        blockStatus = 'block';
+        }else {
+        blockStatus = 'unblock';
+        }
+        document.getElementById('blockDetails').innerHTML = blockStatus+' '+userName;
+        }
+    </script> -->
+</body>
+
+</html>

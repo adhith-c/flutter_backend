@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include('../partials/head'); %>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css">
+
+
+<body>
+    <div class="container-fluid position-relative d-flex p-0">
+        <!-- Spinner Start -->
+        <div id="spinner"
+            class="show bg-dark position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+            <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+        <!-- Spinner End -->
+
+
+        <!-- Sidebar Start -->
+        <%- include('../partials/sidebar'); %>
+        <!-- Sidebar End -->
+
+
+        <!-- Content Start -->
+        <div class="content">
+            <!-- Navbar Start -->
+            <%- include('../partials/adminNavBar'); %>
+            <!-- Navbar End -->
+
+
+            <!-- Table Start -->
+            <div class="container-fluid pt-4 px-4">
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <%- include('../partials/flash'); %>
+                    </div>
+                    <div class="col-12">
+                        <div class="bg-secondary rounded h-100 p-4">
+                            <h6 class="mb-4 text-center">Order Management</h6>
+                            <div class="table-responsive">
+                                <table id="example" class="table">
+                                    <thead>
+                                        <tr>
+                                            <!-- <th scope="col">#</th> -->
+                                            <th scope="col">Order Id</th>
+                                            <th scope="col">Username</th>
+                                            <th scope="col">Total Price</th>
+                                            <th scope="col">Mobile No.</th>
+                                            <th scope="col">Payment type</th>
+                                            <th scope="col">Payment-Status</th>
+                                            <th scope="col">Order-Status</th>
+                                            <th scope="col">Address</th>
+                                            <th scope="col">Actions</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        <% for(let item of order){ %>
+                                        <tr>
+                                            <!-- <th scope="row">1</th>
+                                            <td>John</td> -->
+                                            <td>
+                                                <%= item._id %>
+                                            </td>
+                                            <td>
+                                                <%= item.firstName %>
+                                            </td>
+                                            <td>
+                                                <%= item.totalAmount %>
+                                            </td>
+
+
+                                            <td><%= item.addressDetails.mobileNumber %></td>
+                                            <td><%= item.paymentType %></td>
+                                            <td>
+                                                <%= item.paymentStatus %>
+                                            </td>
+
+                                            <td><%= item.orderStatus %></td>
+                                            <td><button data-bs-toggle="modal" class="btn btn-dark rounded btn-sm"
+                                                    onclick="orders('<%= item._id %>')"
+                                                    data-bs-target="#order">Invoice</button>
+                                                <div class="modal fade" id="order" tabindex="-1" role="dialog"
+                                                    aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                    <div class="modal-dialog modal-dialog-centered modal-l"
+                                                        role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header text-center">
+                                                                <h3 class="modal-title text-dark text-center"
+                                                                    id="exampleModalLabel">
+                                                                    INVOICE</h3>
+                                                                <button type="button" class="close"
+                                                                    data-bs-dismiss="modal" aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                            </div>
+                                                            <div class="modal-body text-dark">
+                                                                <div class="col-md-12 order-details">
+
+                                                                    <div class="order-summary">
+                                                                        <div class="order-col">
+                                                                            <div><strong>PRODUCT</strong></div>
+                                                                            <div><strong>PRICE</strong></div>
+                                                                        </div>
+                                                                        <div class="modal-subbody" id="orderdiv">
+                                                                        </div>
+                                                                        <div>
+                                                                            <strong>Discount</strong>
+                                                                            <div id="discountdiv"></div>
+                                                                        </div>
+                                                                        <div class="order-col">
+                                                                            <div><strong>TOTAL</strong></div>
+                                                                            <div><strong class="order-total"
+                                                                                    id="order-total"></strong>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div><strong>DELIVERY TO:</strong></div>
+                                                                        <div class="addressbody" id="addressdiv">
+                                                                        </div>
+                                                                        <div class="order-col">
+                                                                            <div class="mt-2"><strong>PAYMENT
+                                                                                    STATUS:</strong></div>
+                                                                            <div class="paymentbody" id="paymentdiv">
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="order-col">
+                                                                            <div class="mt-2"><strong>ORDER
+                                                                                    STATUS:</strong></div>
+                                                                            <div class="orderbody" id="orderstatus">
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-success"
+                                                                    data-bs-dismiss="modal">Done</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <% if(item.orderStatus !="cancelled"){ %>
+                                                <div>
+                                                    <a href="/admin/editorders/<%= item._id %>"><button
+                                                            class="btn btn-success btn-sm">Edit</button></a>
+                                                </div>
+                                                <% } %>
+                                            </td>
+
+                                        </tr>
+                                        <% } %>
+
+                                    </tbody>
+
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Table End -->
+
+
+            <!-- Footer Start -->
+
+            <!-- Footer End -->
+        </div>
+        <!-- Content End -->
+
+
+        <!-- Back to Top -->
+        <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+    </div>
+
+
+
+
+    <!-- JavaScript Libraries -->
+    <%- include('../partials/libraries') %>
+    <script>
+        $(document).ready(function () {
+            $('#example').DataTable();
+        });
+
+        function orders(id) {
+            let divMain = document.getElementById('orderdiv');
+            let total = document.getElementById('order-total');
+            let addressDiv = document.getElementById('addressdiv');
+            let DiscountDiv = document.getElementById('discountdiv');
+            let address = '';
+            let divs = '';
+            let discdivs = '';
+            console.log(id);
+            fetch('/orderfetch', {
+                    method: 'post',
+                    headers: {
+                        'Content-type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        id
+                    })
+                })
+                .then(res => res.json())
+                .then(data => {
+                    const item = data.order.orderItems[0];
+                    console.log('data.orderItems', item)
+                    console.log(data.order)
+
+                    data.order.orderItems.forEach(p => {
+                        divs += `<div class="order-products">
+
+            <div class="order-col">
+                <div>${p.productQuantity} x </div>
+                <div>${p.productName} </div>
+                <div> ${p.productPrice}</div>
+            </div>
+        </div>`
+                    })
+                    if (data.order.discount.length > 0) {
+                        data.order.discount.forEach(p => {
+                            discdivs += `<div>Code:${p.code}</div>
+                            <div>Amount:${p.amount}</div>`
+                        })
+                        DiscountDiv.innerHTML = discdivs;
+                    } else {
+                        discdivs += `<div>CodeNill</div>
+                          <div>Amount:Nill</div>`
+
+                        DiscountDiv.innerHTML = discdivs;
+                    }
+                    address += `<div>
+            ${data.order.addressDetails.address}
+        </div>
+        <div>
+            ${data.order.addressDetails.city},${data.order.addressDetails.country},${data.order.addressDetails.pincode}
+        </div>
+        <div>${data.order.addressDetails.mobileNumber}</div>`
+                    console.log('divs', divs)
+                    divMain.innerHTML = divs;
+                    total.innerHTML = `${data.order.totalAmount}`
+                    addressDiv.innerHTML = address
+                    document.getElementById('paymentdiv').innerHTML = `${data.order.paymentStatus}`
+                    document.getElementById('orderstatus').innerHTML = `${data.order.orderStatus}`
+
+
+                })
+        }
+    </script>
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap4.min.js"></script>
+</body>
+
+</html>

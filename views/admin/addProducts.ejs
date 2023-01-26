@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Phonix Admin</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
+    <!-- Favicon -->
+    <link href="img/favicon.ico" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Roboto:wght@500;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Template Stylesheet -->
+    <link href="css/style.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropper/4.1.0/cropper.min.css">
+</head>
+
+
+<body>
+    <div class="container-fluid position-relative d-flex p-0">
+        <!-- Spinner Start -->
+        <div id="spinner"
+            class="show bg-dark position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+            <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+        <!-- Spinner End -->
+
+
+        <!-- Sidebar Start -->
+        <%- include('../partials/sidebar'); %>
+        <!-- Sidebar End -->
+
+
+        <!-- Content Start -->
+        <div class="content">
+            <!-- Navbar Start -->
+            <%- include('../partials/adminNavBar'); %>
+            <!-- Navbar End -->
+
+
+            <!-- Form Start -->
+            <div class="container-fluid pt-4 px-4">
+                <div class="row g-4">
+
+                    <div class="col-md-12">
+                        <div class="bg-secondary rounded h-100 p-4">
+                            <h6 class="mb-4 text-center">Add New Product</h6>
+                            <form action="/admin/add-products" method="POST" enctype="multipart/form-data">
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control" id="name" name="productname"
+                                        placeholder="samsung galaxy s20" required>
+                                    <label for="name">Product Name</label>
+                                </div>
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control" id="price" name="price" placeholder="200000"
+                                        required>
+                                    <label for="price">Price</label>
+                                </div>
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control" id="mrp" name="mrp" placeholder="200000"
+                                        required>
+                                    <label for="mrp">MRP</label>
+                                </div>
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control" id="stock" name="stock" placeholder="100"
+                                        required>
+                                    <label for="stock">Stock</label>
+                                </div>
+                                <div class="form-floating mb-3">
+
+                                    <select class="form-select" id="brand" name="brand"
+                                        aria-label="Floating label select example" onchange="scheduleA.call(this,
+                                        event)" required>
+                                        <% for(let br of brand){ %>
+                                        <option value="<%= br.brandName %>"><%= br.brandName %></option>
+                                        <% } %>
+                                    </select>
+
+                                    <label for="category">Brand</label>
+                                </div>
+                                <div class="form-floating mb-3">
+
+                                    <select class="form-select" id="category" name="category"
+                                        aria-label="Floating label select example" required>
+                                        <% for(let cat of category){ %>
+                                        <option value="<%= cat.categoryName %>"><%= cat.categoryName %></option>
+                                        <% } %>
+                                    </select>
+
+                                    <label for="category">Category</label>
+                                </div>
+                                <div class="form-floating">
+                                    <textarea class="form-control" placeholder="Description" id="description"
+                                        name="description" style="height: 150px;" required></textarea>
+                                    <label for="description">Description</label>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="fileInput" class="form-label">Add product Image</label>
+                                    <input class="form-control bg-dark" type="file" id="fileInput" accept="image/*"
+                                        name="image" multiple style="max-width:100%;" required>
+                                    <input type="button" id="btnCrop" value="Crop" />
+                                    <input type="button" id="btnRestore" value="Restore" />
+                                    <canvas id="canvas"
+                                        style=" height: 200px;width: 200px; background-color: #ffffff; cursor: default; border: 1px solid black;">
+                                        Your browser does not support the HTML5 canvas element.
+                                    </canvas>
+                                    <!-- <div>
+                                        <img id="blah" src="#" alt="your image" />
+                                    </div> -->
+                                </div>
+                                <div class="text-center mb-3">
+                                    <button class="btn btn-primary ">Submit</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <!-- Form End -->
+
+
+            <!-- Footer Start -->
+
+            <!-- Footer End -->
+        </div>
+        <!-- Content End -->
+
+
+        <!-- Back to Top -->
+        <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+    </div>
+
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="lib/chart/chart.min.js"></script>
+    <script src="lib/easing/easing.min.js"></script>
+    <script src="lib/waypoints/waypoints.min.js"></script>
+    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+    <script src="lib/tempusdominus/js/moment.min.js"></script>
+    <script src="lib/tempusdominus/js/moment-timezone.min.js"></script>
+    <script src="lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
+
+    <!-- Template Javascript -->
+    <script src="js/main.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropper/4.1.0/cropper.min.js"></script>
+    <script>
+        var canvas = $("#canvas"),
+            context = canvas.get(0).getContext("2d"),
+            $result = $('#result');
+
+        $('#fileInput').on('change', function () {
+            if (this.files && this.files[0]) {
+                if (this.files[0].type.match(/^image\//)) {
+                    var reader = new FileReader();
+                    reader.onload = function (evt) {
+                        var img = new Image();
+                        img.onload = function () {
+                            context.canvas.height = img.height;
+                            context.canvas.width = img.width;
+                            context.drawImage(img, 0, 0);
+                            var cropper = canvas.cropper({
+                                aspectRatio: 16 / 9
+                            });
+                            $('#btnCrop').click(function () {
+                                // Get a string base 64 data url
+                                var croppedImageDataURL = canvas.cropper('getCroppedCanvas')
+                                    .toDataURL("image/png");
+                                $result.append($('<img>').attr('src', croppedImageDataURL));
+                            });
+                            $('#btnRestore').click(function () {
+                                canvas.cropper('reset');
+                                $result.empty();
+                            });
+                        };
+                        img.src = evt.target.result;
+                    };
+                    reader.readAsDataURL(this.files[0]);
+                } else {
+                    alert("Invalid file type! Please select an image file.");
+                }
+            } else {
+                alert('No file(s) selected.');
+            }
+        });
+    </script>
+    <script type="text/javascript">
+        function setval() {
+            const brand = document.getElementById('brand').value;
+            document.getElementById('name').value = brand;
+        }
+
+        function scheduleA(event) {
+            document.getElementById('name').value = this.options[this.selectedIndex].text;
+
+        }
+    </script>
+
+</body>
+
+</html>
