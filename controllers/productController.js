@@ -29,7 +29,18 @@ cloudinary.config({
   api_key: "214423739351133",
   api_secret: "AOqguffGbX94C6LPl4QoztTNws8",
 });
-
+const viewProducts = async (req, res) => {
+  try {
+    const products = await Product.find({});
+    if (products) {
+      res.status(200).json({ products });
+    } else {
+      res.status(500).json({ msg: "not found" });
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
 const viewProductUser = async (req, res) => {
   try {
     const { id } = req.params;
@@ -161,6 +172,7 @@ const deleteProducts = async (req, res) => {
 };
 
 module.exports = {
+  viewProducts,
   viewProductUser,
   viewProductAdmin,
   addProducts,
