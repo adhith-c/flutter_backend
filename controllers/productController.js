@@ -12,15 +12,15 @@ const { storage, cloudinary } = require("../cloudinary/index");
 const upload = multer({
   storage,
 });
-const Product = require("../model/product");
-const User = require("../model/user");
-const Brand = require("../model/brand");
-const Category = require("../model/category");
-const Order = require("../model/order");
-const Cart = require("../model/cart");
-const Wishlist = require("../model/wishlist");
+const Product = require("../models/product");
+const User = require("../models/user");
+const Brand = require("../models/brand");
+const Category = require("../models/category");
+const Order = require("../models/order");
+const Cart = require("../models/cart");
+const Wishlist = require("../models/wishlist");
 
-const asyncErrorCatcher = require("../util/asynErrorCatch");
+// const asyncErrorCatcher = require("../util/asynErrorCatch");
 
 router.use(methodOverride("_method"));
 

@@ -16,9 +16,9 @@ const upload = multer({
     storage
 });
 
-const Category = require('../model/category');
-const Product = require('../model/product');
-const asyncErrorCatcher = require('../util/asynErrorCatch');
+const Category = require('../models/category');
+const Product = require('../models/product');
+// const asyncErrorCatcher = require('../util/asynErrorCatch');
 
 
 router.use(methodOverride('_method'));

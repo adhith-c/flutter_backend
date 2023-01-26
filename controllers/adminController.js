@@ -12,13 +12,13 @@ const { storage, cloudinary } = require("../cloudinary/index");
 const upload = multer({
   storage,
 });
-const Product = require("../model/product");
-const User = require("../model/user");
-const Brand = require("../model/brand");
-const Coupon = require("../model/coupon");
-const Order = require("../model/order");
-const Banner = require("../model/banner");
-const asyncErrorCatcher = require("../util/asynErrorCatch");
+const Product = require("../models/product");
+const User = require("../models/user");
+const Brand = require("../models/brand");
+const Coupon = require("../models/coupon");
+const Order = require("../models/order");
+const Banner = require("../models/banner");
+// const asyncErrorCatcher = require("../util/asynErrorCatch");
 
 router.use(methodOverride("_method"));
 
@@ -32,8 +32,12 @@ const getAdminLogin = (req, res) => {
   res.render("admin/signin");
 };
 const postAdminLogin = (req, res) => {
+  try {
+    res.redirect("/admin/dashboard");
+  } catch (err) {
+    console.log(err);
+  }
   // res.render('admin/index');
-  res.redirect("/admin/dashboard");
 };
 
 const viewUsers = async (req, res) => {
