@@ -18,7 +18,7 @@ const orderController = require("../controllers/orderController");
 const { logout } = require("../controllers/userController");
 
 router.get("/", adminController.getAdminLogin);
-router.post("/signin", adminController.postAdminLogin);
+router.post("/signin", adminLogged, adminController.postAdminLogin);
 router.get("/dashboard", isAdmin, adminController.getDashboard);
 //<-------------------------------------------------------- PRODUCT Management-------------------------------------------------------------------->
 
