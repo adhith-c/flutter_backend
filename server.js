@@ -26,7 +26,7 @@ const checkoutRoutes = require("./routes/checkoutRoutes");
 const wishlistRoutes = require("./routes/wishlistRoutes");
 // const categoryRoutes = require('./routes/categoryRoutes');
 const productRoutes = require("./routes/productRoutes");
-// const brandRoutes = require('./routes/brandRoutes');
+const bannerRoutes = require("./routes/bannerRoutes");
 
 // const propertyRouter = require("./routes/propertyRoutes");
 
@@ -71,8 +71,7 @@ app.use(
 // app.use(session(sessionConfig));
 app.use(flash());
 app.engine("ejs", ejsMate);
-// app.use(passport.initialize());
-// app.use(passport.session());
+
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 app.use((req, res, next) => {
@@ -99,7 +98,7 @@ app.use("/cart", cartRoutes);
 app.use("/checkout", checkoutRoutes);
 app.use("/wishlist", wishlistRoutes);
 app.use("/products", productRoutes);
-// app.use('/brand', brandRoutes);
+app.use("/banner", bannerRoutes);
 // app.use("/", propertyRouter);
 
 dbConfig();
