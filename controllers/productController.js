@@ -31,7 +31,7 @@ cloudinary.config({
 });
 const viewProducts = async (req, res) => {
   try {
-    const products = await Product.find({});
+    const products = await Product.find({ isDeleted: false });
     if (products) {
       res.status(200).json({ products });
     } else {
