@@ -48,48 +48,53 @@ const viewProductUser = async (req, res) => {
     const relatedProducts = await Product.find({
       category: products.category,
     });
-    let userId = req.session.userId;
-    const categories = await Category.find({});
-    userId = mongoose.Types.ObjectId(userId);
-    let cartCount = await Cart.aggregate([
-      {
-        $match: {
-          userId,
-        },
-      },
-      {
-        $project: {
-          _id: 0,
-          count: {
-            $size: "$cartItems",
-          },
-        },
-      },
-    ]);
-    let wishlistCount = await Wishlist.aggregate([
-      {
-        $match: {
-          userId,
-        },
-      },
-      {
-        $project: {
-          _id: 0,
-          count: {
-            $size: "$Items",
-          },
-        },
-      },
-    ]);
-    res.render("user/product", {
-      products,
-      relatedProducts,
-      cartCount,
-      wishlistCount,
-      categories,
-    });
+    if (products) {
+      res.status(200).json({ products, relatedProducts });
+    } else {
+      res.status(500).json({ msg: "not found" });
+    }
+    // let userId = req.session.userId;
+    // const categories = await Category.find({});
+    // userId = mongoose.Types.ObjectId(userId);
+    // let cartCount = await Cart.aggregate([
+    //   {
+    //     $match: {
+    //       userId,
+    //     },
+    //   },
+    //   {
+    //     $project: {
+    //       _id: 0,
+    //       count: {
+    //         $size: "$cartItems",
+    //       },
+    //     },
+    //   },
+    // ]);
+    // let wishlistCount = await Wishlist.aggregate([
+    //   {
+    //     $match: {
+    //       userId,
+    //     },
+    //   },
+    //   {
+    //     $project: {
+    //       _id: 0,
+    //       count: {
+    //         $size: "$Items",
+    //       },
+    //     },
+    //   },
+    // ]);
+    // res.render("user/product", {
+    //   products,
+    //   relatedProducts,
+    //   cartCount,
+    //   wishlistCount,
+    //   categories,
+    // });
   } catch (error) {
-    res.render("user/404");
+    // res.render("user/404");
     console.log(error);
   }
 };

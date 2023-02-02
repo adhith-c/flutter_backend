@@ -6,7 +6,7 @@ const viewBanners = async (req, res) => {
   try {
     const banner = await Banner.find({});
     if (banner) {
-      res.status(200).json(banner);
+      res.status(200).json({ banner });
     } else {
       res.status(500).json({ message: "no banners added by admin" });
     }

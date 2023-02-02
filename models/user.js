@@ -14,7 +14,7 @@ const UserSchema = new Schema(
       unique: true,
     },
     mobileNumber: {
-      type: Number,
+      type: String,
       required: true,
     },
     password: {

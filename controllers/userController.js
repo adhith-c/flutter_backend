@@ -8,11 +8,7 @@ const authToken = process.env.TWILIO_AUTH_TOKEN;
 const twilio = require("twilio");
 const client = require("twilio")(accountSid, authToken);
 
-const {
-  hashPassword,
-  comparePassword,
-  
-} = require("../utils/helper");
+const { hashPassword, comparePassword } = require("../utils/helper");
 
 const { sendOtpVerification } = require("../utils/otpMailer");
 const { response } = require("../routes/userRoutes");
@@ -68,10 +64,10 @@ exports.register = async (req, res) => {
 exports.otpVerify = async (req, res) => {
   try {
     let mobileNumber = req.body.mobileNumber;
-    if(!mobileNumber && !req.body.otp){
-      res.status(400).json({meg:"MOBILE_NUMBER IS NOT GIVEN"})
-    }else{
-      console.log("mobile num",mobileNumber);
+    if (!mobileNumber && !req.body.otp) {
+      res.status(400).json({ meg: "MOBILE_NUMBER IS NOT GIVEN" });
+    } else {
+      console.log("mobile num", mobileNumber);
       mobileNumber = mobileNumber.toString();
       mobileNumber = mobileNumber.slice(2);
       mobileNumber = Number(mobileNumber);
@@ -84,7 +80,7 @@ exports.otpVerify = async (req, res) => {
           code: `${req.body.otp}`,
         });
       console.log(verification_check.status);
-  
+
       if (verification_check.status == "approved") {
         console.log("otp is approved");
         await User.updateOne(
@@ -97,11 +93,9 @@ exports.otpVerify = async (req, res) => {
         // return { status: false };
       }
     }
-   
   } catch (err) {
     console.log(err);
     res.status(406).json({ msg: "twlioo error contact backend dev" });
-
   }
 };
 
@@ -114,26 +108,27 @@ exports.resendOtp = async (req, res) => {
     sendOtpVerification({ _id: userId, email }, req, res);
   } catch (err) {
     console.log(err);
+    res.status(500).send({ err });
   }
 };
 
 exports.userLogin = async (req, res) => {
   try {
+    console.log("monuuu");
     const { mobileNumber, password } = req.body;
-    const user = await User.findOne({ mobileNumber });
+    const user = await User.findOne({
+      $or: [{ mobileNumber: mobileNumber }, { email: mobileNumber }],
+    });
+
+    console.log(user, "dnhfjd", mobileNumber);
     // let user;
     if (user) {
       const isValidPass = comparePassword(password, user.password);
       if (isValidPass) {
-        const token = jwt.sign(
-          {
-            id: user._id,
-            name: user.name,
-            type: "user",
-          },
-          process.env.JWT_SECRET_KEY
-        );
-        res.status(200).send(`successfully logged in ...${token}`);
+        req.session.userId = user._id;
+        req.session.username = user.name;
+        console.log(req.session.userId, req.session.username);
+        res.status(200).send(`successfully logged in ...${user._id}`);
       } else {
         res.status(403).send("invalid password");
       }
@@ -142,6 +137,7 @@ exports.userLogin = async (req, res) => {
     }
   } catch (err) {
     console.log(err);
+    res.status(500).send({ err });
   }
 };
 
@@ -152,6 +148,7 @@ exports.addProfilePic = async (req, res) => {
     res.send(user);
   } catch (err) {
     console.log(err);
+    res.status(500).send({ err });
   }
 };
 
@@ -162,5 +159,6 @@ exports.editProfile = async (req, res) => {
     res.send(user);
   } catch (err) {
     console.log(err);
+    res.status(500).send({ err });
   }
 };

@@ -65,19 +65,9 @@ const getWishlist = async (req, res) => {
     ]);
     if (wishlist) {
       let items = wishlist.Items;
-      res.render("user/wishlist", {
-        items,
-        wishlistCount,
-        cartCount,
-        categories,
-      });
+      res.status(200).json({ wishlist });
     } else {
-      res.render("user/wishlist", {
-        items: "",
-        wishlistCount,
-        cartCount,
-        categories,
-      });
+      res.status(404).json({ msg: "WishList Empty" });
     }
   } else {
     res.redirect("/login");
@@ -111,8 +101,22 @@ const addToWishlist = async (req, res) => {
         ],
       });
       if (productExist) {
-        req.flash("error", "product already exists in Your WishList");
-        res.redirect("/wishlist");
+        // req.flash("error", "product already exists in Your WishList");
+        // res.redirect("/wishlist");
+        // res.status(400).json({ msg: "Product already exists in Your WishList" })
+        await Wishlist.updateOne(
+          {
+            userId: userId,
+          },
+          {
+            $pull: {
+              Items: {
+                productId: productId,
+              },
+            },
+          }
+        );
+        res.status(202).json({ msg: "Product Removed from wishlist" });
       } else {
         await Wishlist.updateOne(
           {
@@ -126,7 +130,7 @@ const addToWishlist = async (req, res) => {
             },
           }
         );
-        res.redirect("/wishlist");
+        res.status(200).json({ message: "product added successfully" });
       }
     } else {
       try {
@@ -141,8 +145,8 @@ const addToWishlist = async (req, res) => {
         await wishlist.save();
       } catch (err) {
         const msg = "wishlist adding failed";
-        res.send({
-          msg,
+        res.status(500).json({
+          msg: msg,
         });
       }
     }
@@ -161,7 +165,7 @@ const addToWishlist = async (req, res) => {
       },
     ]);
   } else {
-    res.redirect("/login");
+    res.status(401).json({ msg: "invalid user" });
     //const msg = 'please login to continue';res.send({ msg });return;
   }
 };
