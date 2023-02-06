@@ -99,19 +99,6 @@ exports.otpVerify = async (req, res) => {
   }
 };
 
-exports.resendOtp = async (req, res) => {
-  try {
-    const userId = req.params.id;
-    const user = await User.findById({ _id: userId });
-    await Otp.findOneAndDelete({ userId });
-    const email = user.email;
-    sendOtpVerification({ _id: userId, email }, req, res);
-  } catch (err) {
-    console.log(err);
-    res.status(500).send({ err });
-  }
-};
-
 exports.userLogin = async (req, res) => {
   try {
     console.log("monuuu");
@@ -128,7 +115,7 @@ exports.userLogin = async (req, res) => {
         req.session.userId = user._id;
         req.session.username = user.name;
         console.log(req.session.userId, req.session.username);
-        res.status(200).send(`successfully logged in ...${user._id}`);
+        res.status(200).json({ userId: user._id });
       } else {
         res.status(403).send("invalid password");
       }

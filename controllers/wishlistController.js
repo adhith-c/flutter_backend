@@ -15,8 +15,8 @@ const product = require("../models/product");
 const user = require("../models/user");
 
 const getWishlist = async (req, res) => {
-  if (req.session.userId) {
-    let userId = req.session.userId;
+  if (req.params.userId) {
+    let userId = req.params.userId;
     userId = mongoose.Types.ObjectId(userId);
     console.log("userId", userId);
     const categories = await Category.find({});
@@ -70,16 +70,16 @@ const getWishlist = async (req, res) => {
       res.status(404).json({ msg: "WishList Empty" });
     }
   } else {
-    res.redirect("/login");
+    res.status(500).json({ msg: "invalid userId" });
   }
 };
 
 const addToWishlist = async (req, res) => {
-  if (req.session.username) {
+  if (req.params.userId) {
     let productId = req.params.id;
 
     productId = new mongoose.Types.ObjectId(productId);
-    let userId = req.session.userId;
+    let userId = req.params.userId;
     userId = mongoose.Types.ObjectId(userId);
     let userExist = await Wishlist.findOne({
       userId: userId,
@@ -143,6 +143,9 @@ const addToWishlist = async (req, res) => {
           ],
         });
         await wishlist.save();
+        res
+          .status(201)
+          .json({ message: "wishlist created and saved successfully" });
       } catch (err) {
         const msg = "wishlist adding failed";
         res.status(500).json({
