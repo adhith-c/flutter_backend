@@ -174,25 +174,53 @@ const addToWishlist = async (req, res) => {
 };
 
 const deleteFromWishlist = async (req, res) => {
-  console.log("req body: ", req.body);
-  let productId = req.body.wishlistid;
-  productId = mongoose.Types.ObjectId(productId);
-  console.log("productid", productId);
-  let userId = req.session.userId;
-  userId = mongoose.Types.ObjectId(userId);
-  console.log("userid", userId);
-  await Wishlist.updateOne(
-    {
+  try {
+    let userId = req.params.userId;
+    let productId = req.params.id;
+    productId = mongoose.Types.ObjectId(productId);
+    userId = mongoose.Types.ObjectId(userId);
+    let userExist = await Wishlist.findOne({
       userId: userId,
-    },
-    {
-      $pull: {
-        Items: {
-          productId: productId,
-        },
-      },
+    });
+    if (userExist) {
+      let productExist = await Wishlist.findOne({
+        $and: [
+          {
+            userId,
+          },
+          {
+            Items: {
+              $elemMatch: {
+                productId,
+              },
+            },
+          },
+        ],
+      });
+      if (productExist) {
+        await Wishlist.updateOne(
+          {
+            userId: userId,
+          },
+          {
+            $pull: {
+              Items: {
+                productId: productId,
+              },
+            },
+          }
+        );
+        res.status(200).json({ msg: "success" });
+      } else {
+        res.status(404).json({ msg: "product not found" });
+      }
+    } else {
+      res.status(404).json({ msg: "invalid userId" });
     }
-  );
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ msg: err.message });
+  }
 };
 
 module.exports = {
