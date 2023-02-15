@@ -2,12 +2,11 @@ const express = require("express");
 
 const cartController = require("../controllers/cartController");
 const router = express.Router();
-router.get("/", cartController.getCart);
-// router.get('/addtocart/:id', cartController.addToCart);
-router.post("/addtocart", cartController.addToCart);
-router.post("/addtoexistingcart", cartController.addToExistingCart);
-router.post("/decfromcart", cartController.decrementFromCart);
-router.post("/delfromcart", cartController.deleteFromCart);
-router.post("/checkcoupon", cartController.checkCoupon);
+router.get("/:userId", cartController.getCart);
+router.post("/addtocart/:userId", cartController.addToCart);
+router.post("/addtoexistingcart/:userId", cartController.addToExistingCart);
+router.post("/decfromcart/:userId", cartController.decrementFromCart);
+router.post("/delfromcart/:userId", cartController.deleteFromCart);
+// router.post("/checkcoupon/:userId", cartController.checkCoupon);
 
 module.exports = router;
