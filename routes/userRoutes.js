@@ -10,6 +10,10 @@ const {
   // resendOtp,
   addProfilePic,
   editProfile,
+  postNewAddress,
+  editAddress,
+  deleteAddress,
+  getAddress,
 } = require("../controllers/userController");
 
 router.get("/", homePage);
@@ -20,5 +24,10 @@ router.post("/otpVerify", otpVerify);
 router.post("/login", userLogin);
 router.put("/addProfilePhoto", addProfilePic);
 router.put("/editProfile/:id", editProfile);
+
+router.post("/addnewaddress'/:userId", postNewAddress);
+router.post("/editaddress/:userId/:id", editAddress);
+router.post("/deleteaddress/:userId", deleteAddress);
+router.post("/getaddress/:userId", getAddress);
 
 module.exports = router;

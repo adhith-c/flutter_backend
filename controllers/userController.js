@@ -149,3 +149,105 @@ exports.editProfile = async (req, res) => {
     res.status(500).send({ err });
   }
 };
+
+exports.getAddress = async (req, res) => {
+  try {
+    let addressId = req.body.addressid;
+    let userId = req.params.userId;
+    userId = mongoose.Types.ObjectId(userId);
+    addressId = mongoose.Types.ObjectId(addressId);
+    const address = await User.aggregate([
+      {
+        $match: {
+          _id: userId,
+        },
+      },
+      {
+        $unwind: "$addressDetails",
+      },
+      {
+        $match: {
+          "addressDetails._id": addressId,
+        },
+      },
+    ]);
+    res.status(200).json({ address: address[0] });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ msg: err });
+  }
+};
+exports.postNewAddress = async (req, res) => {
+  try {
+    let userId = req.params.userId;
+    userId = mongoose.Types.ObjectId(userId);
+    const user = await User.findById(userId);
+    console.log(user);
+    let obj = JSON.parse(JSON.stringify(req.body)); //console.log(req.body);
+    console.log(obj);
+    user.addressDetails.push(obj);
+    await user.save();
+    res.status(200).json({ user });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ msg: err });
+  }
+};
+
+exports.editAddress = async (req, res) => {
+  try {
+    let userId = req.params.userId;
+    userId = mongoose.Types.ObjectId(userId);
+    let id = req.params.id;
+    id = mongoose.Types.ObjectId(id);
+    // console.log(id);
+    let obj = JSON.parse(JSON.stringify(req.body));
+    await User.findOneAndUpdate(
+      {
+        $and: [
+          {
+            _id: userId,
+          },
+          {
+            "addressDetails._id": id,
+          },
+        ],
+      },
+      {
+        $set: {
+          "addressDetails.$": obj,
+        },
+      }
+    );
+    res.status(200).json({ obj });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ msg: err });
+  }
+};
+
+exports.deleteAddress = async (req, res) => {
+  try {
+    let userId = req.params.userId;
+    userId = mongoose.Types.ObjectId(userId);
+    let addressId = req.body.addressid;
+    addressId = mongoose.Types.ObjectId(addressId);
+    console.log(addressId);
+    await User.updateOne(
+      {
+        _id: userId,
+      },
+      {
+        $pull: {
+          addressDetails: {
+            _id: addressId,
+          },
+        },
+      }
+    );
+    res.status(200).json({ msg: "address deleted successfully" });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ msg: err });
+  }
+};
